@@ -23,7 +23,10 @@ data Instruction = Instruction
   } deriving (Show, Eq, Ord)
 
 data PointTo
-  = BeforeCall {-# UNPACK #-} !Instruction
-  | AfterCall {-# UNPACK #-} !Instruction
-  | Enter {-# UNPACK #-} !Method
+  = BeforeCall !Instruction
+  | AfterCall !Instruction
+  | Enter !Method
   deriving (Show, Eq, Ord)
+
+-- data CallEdge =
+--   CallEdge !Instruction !

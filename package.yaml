@@ -25,6 +25,7 @@ dependencies:
 - text
 - bytestring
 - filepath
+- directory
 - vector
 - containers
 - mtl
@@ -34,7 +35,7 @@ library:
   source-dirs: src
 
 executables:
-  wiretap-pointto-exe:
+  wiretap:
     main:                Main.hs
     source-dirs:         app
     ghc-options:

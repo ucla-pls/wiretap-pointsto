@@ -39,7 +39,6 @@ getPointToEntries =
   True ->  return []
   False -> liftM2 (:) get getPointToEntries
 
-
 toPointTo :: V.Vector D.Instruction -> V.Vector D.Method -> PointToEntry -> D.PointTo
 toPointTo inst meths = \case
   BeforeCall i -> D.BeforeCall (inst V.! fromIntegral i)
