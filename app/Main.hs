@@ -82,59 +82,15 @@ main = do
     <> Builder.singleton ','
     <> methodToText m
 
-  -- let
-  --   ms = foldMap (\(i, m) -> S.fromList [ instMethod i, m ]) v
-  --   is = foldMap (\(i, m) -> S.fromList [ i ]) v
-
-
-
-  -- LazyText.putStrLn "digraph {"
-  -- forM_ ms $ \m -> do
-  --   let cls:mth:[] = Text.splitOn "." (methodAsText m)
-  --   putStrLn ("m" ++ show (methodId m)
-  --             ++ " [label=\"" ++ Text.unpack (Text.replace "\"<" "<". Text.replace ">\"" ">" $ mth) ++ "\"]")
-    -- putStrLn ("m" ++ show (methodId m)
-    --           ++ " [label=<" ++ Text.unpack (Text.replace "\"<" "&lt;". Text.replace ">\"" "&gt;" $ mth)
-    --           ++ "<BR /><FONT POINT-SIZE=\"13\">" ++ Text.unpack cls
-    --           ++ "</FONT>>]")
-
-  -- forM_ is $ \i -> do
-  --   putStrLn ("i" ++ show (instId i) ++ "[label=" ++ (show (instOffset i)) ++ ",shape=box]")
-  --   putStr ("m" ++ (show . methodId . instMethod $ i))
-  --   putStr (" -> ")
-  --   putStr ("i" ++ (show . instId $ i))
-  --   putStrLn ("[style=dashed, arrowhead=none]")
-
-  -- forM_ v $ \(i, m) -> do
-  --   putStr ("m" ++ (show . methodId . instMethod $ i))
-  --   putStr (" -> ")
-  --   putStrLn ("m" ++ (show . methodId $ m))
-  -- LazyText.putStrLn "}"
-
 stackMachine :: PointTo -> StateT [Instruction] (WriterT (S.Set (Instruction, Method)) IO) ()
 stackMachine p = do
   case p of
     BeforeCall i -> do
-      -- s <- get
-      -- liftIO $ do
-      --   Text.putStr (Text.replicate (length s) "    ")
-      --   Text.putStr ("  ")
-      --   Text.putStr (Text.pack . show $ instOffset i)
-      --   Text.putStrLn (" ->")
       modify (i:)
     AfterCall i -> do
       modify (tail . dropWhile (/= i))
-      -- s <- get
-      -- liftIO $ do
-      --   Text.putStr (Text.replicate (length s) "    ")
-      --   Text.putStr ("  ")
-      --   Text.putStr (Text.pack . show $ instOffset i)
-      --   Text.putStrLn (" <-")
     Enter m -> do
       s <- get
-      -- liftIO $ do
-      --   Text.putStr (Text.replicate (length s) "    ")
-      --   Text.putStrLn (methodAsText m)
       case s of
         r:_ -> tell (S.singleton (r, m))
         _   -> tell (S.empty)
