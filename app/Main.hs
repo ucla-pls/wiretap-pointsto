@@ -59,7 +59,7 @@ main = do
           (n, b) = Text.span (/= '!') a
         in Instruction i
            (methodLookup M.! n)
-           (either (error.show) fst . Text.decimal $ Text.tail b)
+           (either (error.show) fst . Text.signed Text.decimal $ Text.tail b)
     )
     . V.fromList
     . Text.lines
