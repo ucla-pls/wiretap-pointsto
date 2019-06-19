@@ -43,15 +43,4 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - wiretap-pointto
-
-tests:
-  wiretap-pointsto-test:
-    main:                Spec.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - wiretap-pointto
+    - wiretap-pointsto
