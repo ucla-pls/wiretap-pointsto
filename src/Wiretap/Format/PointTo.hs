@@ -14,6 +14,10 @@ module Wiretap.Format.PointTo where
 import           Data.Binary
 import           Data.Binary.Get
 
+-- bytestring
+import Data.ByteString.Lazy.Internal as BL
+import Data.ByteString as BS
+
 -- base
 import           Control.Monad
 import           Data.Int
@@ -32,6 +36,30 @@ data PointToEntry
   deriving (Show, Eq, Generic)
 
 instance Binary PointToEntry
+
+streamPointToEntries ::
+  Monad m =>
+  V.Vector D.Instruction
+  -> V.Vector D.Method
+  -> (D.PointTo -> m ())
+  -> (String -> m ())
+  -> BL.ByteString
+  -> m ()
+streamPointToEntries insts methods succ fail = flip go decoder where
+  go input = \case
+    (Done leftover _ a) -> do
+      succ (toPointTo insts methods a)
+      go (BL.chunk leftover input) decoder
+    (Partial k) ->
+      case input of
+        BL.Chunk a as ->
+          go as (k $ Just a)
+        _ -> return ()
+    (Fail _leftover _consumed msg) ->
+      fail msg
+  decoder = runGetIncremental get
+{-# INLINE streamPointToEntries #-}
+
 
 getPointToEntries :: Get [PointToEntry]
 getPointToEntries =
